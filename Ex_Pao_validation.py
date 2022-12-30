@@ -1,4 +1,4 @@
-def Commence_Par_Majuscule(text):
+def commence_par_majuscule(text):
     """
      Si la chaine "text" commence par une majuscule alors True sinon False
     : param text: string
@@ -12,9 +12,9 @@ def Commence_Par_Majuscule(text):
     return result
 
 
-def Bonne_Ponctuation(text):
+def bonne_ponctuation(text):
     """
-    Si le dernier caractère de la chaine est ponctué par un "." ou un " !" ou un "?"
+    Si le dernier caractère de la chaine est ponctué par un "." ou un "!" ou un "?"
     :param text: string
     :return: Boolean
     """
@@ -25,16 +25,14 @@ def Bonne_Ponctuation(text):
     return result
 
 
-def Espace_Validation(car_prev, car_cur, car_find, espace_accepte=False):
+def espace_validation(car_prev, car_cur, car_find, espace_accepte=False):
     """
     Contrôle de la position correcte des espaces
-
     :param car_prev: caractère a comparer
     :param car_cur: caractère a comparer
     :param car_find: caractère du contrôle
     :param espace_accepte: Vrai  accepte espace / Faux n'accepte pas les espaces
     :return:
-
     """
 
     result = True
@@ -48,7 +46,7 @@ def Espace_Validation(car_prev, car_cur, car_find, espace_accepte=False):
     return result
 
 
-def Validation_Phrase(text):
+def validation_phrase(text):
     """
     Permet de vérifier les règles de PAO suivante :
         ● La phrase commence par une Majuscule.\n
@@ -57,45 +55,47 @@ def Validation_Phrase(text):
         (dans ce cas, on respecte les règles ci-après) :\n
         ● La virgule et le point sont collés au mot qui les précède et sont suivi par un espace.\n
         ● Le point-virgule, les deux points et le point d'interrogation sont entourés d'un espace.\n
-
     Parameters:
                    text (str): chaine caractères
     :returns:
-        - Mess1 - Votre phrase ne commence pas par une Majuscule.
-        - Mess2 - Votre phrase ne finis pas par un signe de ponctuation
-        - Mess3 - Vous avez 2 espaces consécutifs en position X
-        - Mess4 - Un signe de ponctuation doit être suivi par un espace en position X
-        - Mess5 - Avant les caractères suivants (. et ,) il ne faut pas d'espace en position X
-        - Mess6 - Avant les caractères suivants (: et !) il faut un espace en position X
-        - Mess7 - Votre phrase est correcte
+        - Mess1 - Veuillez corriger votre phrase selon les indications données.
+        - Mess2 - Votre phrase est correcte.
     """
-    if not Commence_Par_Majuscule(text):
-        return "Votre phrase ne commence pas par une Majuscule"
-    if not Bonne_Ponctuation(text):
-        return "Votre phrase ne finis pas par un signe de ponctuation"
+    fail_count = 0
+    if not commence_par_majuscule(text):
+        fail_count += 1
+        print("Votre phrase ne commence pas par une Majuscule")
+    if not bonne_ponctuation(text):
+        fail_count += 1
+        print("Votre phrase ne finis pas par un signe de ponctuation")
 
     car_prev = text[0]
     counter = 0
-    for car in text[1:len(text) - 1]:
+    for car in text[1:]:
 
-        if not Espace_Validation(car_prev, car, ' ', espace_accepte=False):
-            return f"Vous avez 2 espaces consécutifs en position {counter+1}"
+        if not espace_validation(car_prev, car, ' ', espace_accepte=False):
+            fail_count += 1
+            print(f"Vous avez 2 espaces consécutifs en position {counter+1}")
 
-        if not Espace_Validation(car, car_prev, (',', ':', '?', '.'), espace_accepte=True):
-            return f"Un signe de ponctuation doit être suivi par un espace en position {counter+1}"
+        if not espace_validation(car, car_prev, (',', ':', '?', '.'), espace_accepte=True):
+            fail_count += 1
+            print(f"Un signe de ponctuation doit être suivi par un espace en position {counter+1}")
 
-        if not Espace_Validation(car_prev, car, ('.', ','), espace_accepte=False):
-            return f"Avant les caractères suivants (. et ,) il ne faut pas d'espace en position {counter+1}"
+        if not espace_validation(car_prev, car, ('.', ','), espace_accepte=False):
+            fail_count += 1
+            print(f"Avant les caractères suivants (. et ,) il ne faut pas d'espace en position {counter+1}")
 
-        if not Espace_Validation(car_prev, car, (':', '!'), espace_accepte=True):
-            return f"Avant les caractères suivants (: et !) il faut un espace en position {counter+1}"
+        if not espace_validation(car_prev, car, (':', '!', '?'), espace_accepte=True):
+            fail_count += 1
+            print(f"Avant les caractères suivants (: et !) il faut un espace en position {counter+1}")
 
         car_prev = car
         counter += 1
-    return "Votre phrase est correcte"
+    if fail_count != 0:
+        return "Veuillez corriger votre phrase selon les indications données."
+    else:
+        return "Votre phrase est correcte."
 
 
-phrase = input("Entrer une phrase pour vérification")
-print(Validation_Phrase(phrase))
-
-
+phrase = input("Entrer une phrase pour vérification :\n")
+print(validation_phrase(phrase))
